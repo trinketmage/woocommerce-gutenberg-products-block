@@ -4,7 +4,7 @@ Tags: gutenberg, woocommerce, woo commerce, products
 Requires at least: 5.0
 Tested up to: 5.2
 Requires PHP: 5.2
-Stable tag: 1.4.0
+Stable tag: 2.0.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -83,8 +83,9 @@ Release and roadmap notes available on the [WooCommerce Developers Blog](https:/
 
 == Changelog ==
 
-= 2.0.1 - 2019-04-19 =
+= 2.0.1 - 2019-04-22 =
 
+- Fix: Fix warnings about blocks already being registered.
 - Fix: Fix a conflict with WooCommerce 3.6 and WooCommerce Blocks 1.4 (this change only applies to the version of blocks bundled with WooCommerce core).
 
 = 2.0.0 - 2019-04-18 =
