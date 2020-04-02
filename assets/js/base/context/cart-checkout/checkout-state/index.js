@@ -2,6 +2,10 @@
  * External dependencies
  */
 import {
+	usePaymentMethodDataContext,
+	useShippingDataContext,
+} from '@woocommerce/base-context';
+import {
 	createContext,
 	useContext,
 	useReducer,
@@ -128,6 +132,16 @@ export const CheckoutStateProvider = ( {
 		[]
 	);
 
+	const { hasValidationErrors } = useValidationContext();
+	const { currentStatus } = usePaymentMethodDataContext();
+	const { hasError: shippingHasError } = useShippingDataContext();
+	const withErrors =
+		hasValidationErrors() || currentStatus.hasError || shippingHasError;
+
+	useEffect( () => {
+		dispatchActions.setHasError( withErrors );
+	}, [ withErrors ] );
+
 	// emit events.
 	useEffect( () => {
 		const status = checkoutState.status;
@@ -139,7 +153,6 @@ export const CheckoutStateProvider = ( {
 			).then( ( response ) => {
 				if ( response !== true ) {
 					setValidationErrors( response );
-					dispatchActions.setHasError();
 				}
 				dispatch( actions.setComplete() );
 			} );
