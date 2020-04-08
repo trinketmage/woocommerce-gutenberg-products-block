@@ -141,7 +141,9 @@ const Checkout = ( { attributes, scrollToTop } ) => {
 		<>
 			<SidebarLayout className="wc-block-checkout">
 				<Main className="wc-block-checkout__main">
-					<ExpressCheckoutFormControl />
+					{ cartTotals.total_price > 0 && (
+						<ExpressCheckoutFormControl />
+					) }
 					<CheckoutForm>
 						<FormStep
 							id="contact-fields"
@@ -331,24 +333,26 @@ const Checkout = ( { attributes, scrollToTop } ) => {
 								/>
 							</FormStep>
 						) }
-						<FormStep
-							id="payment-method"
-							className="wc-block-checkout__payment-method"
-							title={ __(
-								'Payment method',
-								'woo-gutenberg-products-block'
-							) }
-							description={
-								Object.keys( paymentMethods ).length > 1
-									? __(
-											'Select a payment method below.',
-											'woo-gutenberg-products-block'
-									  )
-									: ''
-							}
-						>
-							<PaymentMethods />
-						</FormStep>
+						{ cartTotals.total_price > 0 && (
+							<FormStep
+								id="payment-method"
+								className="wc-block-checkout__payment-method"
+								title={ __(
+									'Payment method',
+									'woo-gutenberg-products-block'
+								) }
+								description={
+									Object.keys( paymentMethods ).length > 1
+										? __(
+												'Select a payment method below.',
+												'woo-gutenberg-products-block'
+										  )
+										: ''
+								}
+							>
+								<PaymentMethods />
+							</FormStep>
+						) }
 					</CheckoutForm>
 				</Main>
 				<Sidebar className="wc-block-checkout__sidebar">
