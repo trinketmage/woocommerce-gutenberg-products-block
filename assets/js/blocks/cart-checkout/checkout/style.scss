@@ -77,16 +77,17 @@
 		padding-right: $gap-small;
 	}
 
+	.wc-block-order-summary-item__header {
+		display: flex;
+	}
+
 	.wc-block-product-name {
-		display: inline;
+		margin-right: 0.5em;
+		flex-grow: 1;
 	}
 
 	.wc-block-order-summary-item__prices {
 		font-size: 0.875em;
-	}
-
-	.wc-block-order-summary-item__total-price {
-		float: right;
 	}
 }
 
