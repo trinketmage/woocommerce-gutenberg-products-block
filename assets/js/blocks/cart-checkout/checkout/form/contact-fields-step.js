@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { FormStep } from '@woocommerce/base-components/cart-checkout';
-import { ValidatedTextInput } from '@woocommerce/base-components/text-input';
+import { DebouncedValidatedTextInput } from '@woocommerce/base-components/text-input';
 import { useCheckoutAddress } from '@woocommerce/base-hooks';
 import PropTypes from 'prop-types';
 
@@ -30,7 +30,7 @@ const ContactFieldsStep = ( { disabled } ) => {
 			) }
 			stepHeadingContent={ () => <LoginPrompt /> }
 		>
-			<ValidatedTextInput
+			<DebouncedValidatedTextInput
 				id="email"
 				type="email"
 				label={ __( 'Email address', 'woo-gutenberg-products-block' ) }

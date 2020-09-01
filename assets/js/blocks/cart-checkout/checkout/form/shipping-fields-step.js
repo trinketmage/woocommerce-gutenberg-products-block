@@ -1,17 +1,15 @@
 /**
  * External dependencies
  */
-import { useState, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	AddressForm,
 	FormStep,
 } from '@woocommerce/base-components/cart-checkout';
-import { ValidatedTextInput } from '@woocommerce/base-components/text-input';
+import { DebouncedValidatedTextInput } from '@woocommerce/base-components/text-input';
 import CheckboxControl from '@woocommerce/base-components/checkbox-control';
 import { useShippingDataContext } from '@woocommerce/base-context';
 import { useCheckoutAddress } from '@woocommerce/base-hooks';
-import { useDebouncedCallback } from 'use-debounce';
 import PropTypes from 'prop-types';
 
 /**
@@ -33,25 +31,10 @@ const ShippingFieldsStep = ( {
 		billingFields,
 		setPhone,
 		shippingAsBilling,
-		shippingFields: contextShippingFields,
-		setShippingFields: setContextShippingFields,
+		shippingFields,
+		setShippingFields,
 		setShippingAsBilling,
 	} = useCheckoutAddress();
-
-	// Keep a local copy of shipping fields so we can debounce updates.
-	const [ shippingFields, setShippingFields ] = useState(
-		contextShippingFields
-	);
-	const [ debouncedSetContextShippingFields ] = useDebouncedCallback(
-		( fields ) => {
-			setContextShippingFields( fields );
-		},
-		400
-	);
-	useEffect( () => {
-		debouncedSetContextShippingFields( shippingFields );
-	}, [ debouncedSetContextShippingFields, shippingFields ] );
-
 	const addressFieldsConfig = useAddressFieldsConfig( {
 		defaultAddressFields,
 		showCompanyField,
@@ -82,7 +65,7 @@ const ShippingFieldsStep = ( {
 				fieldConfig={ addressFieldsConfig }
 			/>
 			{ showPhoneField && (
-				<ValidatedTextInput
+				<DebouncedValidatedTextInput
 					id="phone"
 					type="tel"
 					label={
