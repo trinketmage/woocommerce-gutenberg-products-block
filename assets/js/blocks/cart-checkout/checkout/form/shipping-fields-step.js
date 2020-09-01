@@ -1,6 +1,8 @@
 /**
  * External dependencies
  */
+import { useState, useEffect } from '@wordpress/element';
+import isShallowEqual from '@wordpress/is-shallow-equal';
 import { __ } from '@wordpress/i18n';
 import {
 	AddressForm,
@@ -10,6 +12,7 @@ import { ValidatedTextInput } from '@woocommerce/base-components/text-input';
 import CheckboxControl from '@woocommerce/base-components/checkbox-control';
 import { useShippingDataContext } from '@woocommerce/base-context';
 import { useCheckoutAddress } from '@woocommerce/base-hooks';
+import { useDebounce } from 'use-debounce';
 import PropTypes from 'prop-types';
 
 /**
@@ -31,10 +34,26 @@ const ShippingFieldsStep = ( {
 		billingFields,
 		setPhone,
 		shippingAsBilling,
-		shippingFields,
-		setShippingFields,
+		shippingFields: contextShippingFields,
+		setShippingFields: setContextShippingFields,
 		setShippingAsBilling,
 	} = useCheckoutAddress();
+	// Keep a local copy of shipping fields so we can debounce updates.
+	const [ shippingFields, setShippingFields ] = useState(
+		contextShippingFields
+	);
+	const [ debouncedShippingFields ] = useDebounce( shippingFields, 400 );
+	useEffect( () => {
+		if (
+			! isShallowEqual( contextShippingFields, debouncedShippingFields )
+		) {
+			setContextShippingFields( debouncedShippingFields );
+		}
+	}, [
+		contextShippingFields,
+		debouncedShippingFields,
+		setContextShippingFields,
+	] );
 	const addressFieldsConfig = useAddressFieldsConfig( {
 		defaultAddressFields,
 		showCompanyField,
