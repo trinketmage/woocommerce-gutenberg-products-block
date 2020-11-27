@@ -212,7 +212,8 @@
 	}
 }
 
-@mixin ie {
+/* IE 11 will not support multi-range slider due to poor pointer-events support on the thumb. Reverts to 2 sliders. */
+@mixin ie11() {
 	.wc-block-components-price-slider__range-input-wrapper {
 		background: transparent;
 		box-shadow: none;
@@ -263,27 +264,21 @@
 		}
 	}
 
-	&.is-loading,
-	&.is-disabled {
-		.wc-block-components-price-slider__range-input-wrapper {
-			@include placeholder();
-			box-shadow: none;
+	.wc-block-components-price-slider {
+		&.is-loading,
+		&.is-disabled {
+			.wc-block-components-price-slider__range-input-wrapper {
+				@include placeholder();
+				box-shadow: none;
+			}
+		}
+
+		&.is-disabled:not(.is-loading) {
+			.wc-block-components-price-slider__range-input-wrapper {
+				animation: none;
+			}
 		}
 	}
-
-	&.is-disabled:not(.is-loading) {
-		.wc-block-components-price-slider__range-input-wrapper {
-			animation: none;
-		}
-	}
-}
-
-/* IE 11 will not support multi-range slider due to poor pointer-events support on the thumb. Reverts to 2 sliders. */
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-	@include ie;
-}
-@supports (-ms-ime-align:auto) {
-	@include ie;
 }
 
 .theme-twentytwentyone {
@@ -335,7 +330,7 @@
 		}
 	}
 
-	@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	@mixin ie11() {
 		.wc-block-components-price-slider__range-input-wrapper {
 			border: 0;
 			height: auto;
