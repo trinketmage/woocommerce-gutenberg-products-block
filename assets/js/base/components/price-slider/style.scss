@@ -212,8 +212,7 @@
 	}
 }
 
-/* IE 11 will not support multi-range slider due to poor pointer-events support on the thumb. Reverts to 2 sliders. */
-@mixin ie11() {
+@mixin ie-fixes() {
 	.wc-block-components-price-slider__range-input-wrapper {
 		background: transparent;
 		box-shadow: none;
@@ -280,6 +279,17 @@
 		}
 	}
 }
+
+/* IE 11 will not support multi-range slider due to poor pointer-events support on the thumb. Reverts to 2 sliders. */
+@mixin ie11() {
+	@include ie-fixes();
+}
+
+// Targets Edge <= 18.
+@supports (-ms-ime-align:auto) {
+	@include ie-fixes();
+}
+
 
 .theme-twentytwentyone {
 	$border-width: 3px;
