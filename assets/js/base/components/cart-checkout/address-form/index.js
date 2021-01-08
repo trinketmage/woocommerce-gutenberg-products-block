@@ -20,7 +20,7 @@ import { withInstanceId } from '@woocommerce/base-hocs/with-instance-id';
  * Internal dependencies
  */
 import defaultAddressFields from './default-address-fields';
-import countryAddressFields from './country-address-fields';
+import prepareAddressFields from './prepare-address-fields';
 
 // If it's the shipping address form and the user starts entering address
 // values without having set the country first, show an error.
@@ -76,18 +76,15 @@ const AddressForm = ( {
 		setValidationErrors,
 		clearValidationError,
 	} = useValidationContext();
-	const countryLocale = countryAddressFields[ values.country ] || {};
-	const addressFields = fields.map( ( field ) => ( {
-		key: field,
-		...defaultAddressFields[ field ],
-		...countryLocale[ field ],
-		...fieldConfig[ field ],
-	} ) );
-	const sortedAddressFields = addressFields.sort(
-		( a, b ) => a.index - b.index
-	);
+
 	const countryValidationError =
 		getValidationError( 'shipping-missing-country' ) || {};
+	const addressFields = prepareAddressFields( fieldConfig, values.country );
+	const addressFormFields = fields.map( ( field ) => ( {
+		key: field,
+		...addressFields[ field ],
+	} ) );
+
 	useEffect( () => {
 		if ( type === 'shipping' ) {
 			validateShippingCountry(
@@ -111,7 +108,7 @@ const AddressForm = ( {
 
 	return (
 		<div id={ id } className="wc-block-components-address-form">
-			{ sortedAddressFields.map( ( field ) => {
+			{ addressFormFields.map( ( field ) => {
 				if ( field.hidden ) {
 					return null;
 				}
