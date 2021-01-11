@@ -61,6 +61,7 @@ class Library {
 			'PriceFilter',
 			'AttributeFilter',
 			'ActiveFilters',
+			'HandpickedSlider',
 		];
 		if ( Package::feature()->is_feature_plugin_build() ) {
 			$blocks[] = 'Checkout';
