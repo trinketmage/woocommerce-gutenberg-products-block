@@ -77,14 +77,17 @@ class HandpickedSlider extends AbstractProductGrid {
 			return '';
 		}
 
-		$classes = $this->get_container_classes();
-		$output  = implode( '', array_map( array( $this, 'render_product' ), $products ) );
+		$classes  = $this->get_container_classes();
+		$output   = implode( '', array_map( array( $this, 'render_product' ), $products ) );
+		$total    = count( $products );
+		$controls = '<span class="wc-block-slider__controls">
+		<span class="wc-block-slider__control wc-block-slider__left"><svg width="23" height="8" viewBox="0 0 23 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.3536 4.35356C22.5488 4.15829 22.5488 3.84171 22.3536 3.64645L19.1716 0.464468C18.9763 0.269206 18.6597 0.269206 18.4645 0.464468C18.2692 0.65973 18.2692 0.976312 18.4645 1.17157L21.2929 4L18.4645 6.82843C18.2692 7.02369 18.2692 7.34027 18.4645 7.53554C18.6597 7.7308 18.9763 7.7308 19.1716 7.53554L22.3536 4.35356ZM-4.37114e-08 4.5L22 4.5L22 3.5L4.37114e-08 3.5L-4.37114e-08 4.5Z" fill="#B82D25"/></svg></span>
+		<span class="wc-block-slider__control wc-block-slider__right"><svg width="23" height="8" viewBox="0 0 23 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.3536 4.35356C22.5488 4.15829 22.5488 3.84171 22.3536 3.64645L19.1716 0.464468C18.9763 0.269206 18.6597 0.269206 18.4645 0.464468C18.2692 0.65973 18.2692 0.976312 18.4645 1.17157L21.2929 4L18.4645 6.82843C18.2692 7.02369 18.2692 7.34027 18.4645 7.53554C18.6597 7.7308 18.9763 7.7308 19.1716 7.53554L22.3536 4.35356ZM-4.37114e-08 4.5L22 4.5L22 3.5L4.37114e-08 3.5L-4.37114e-08 4.5Z" fill="#B82D25"/></svg></span>
+		</span>';
+		$navs     = ( $total > 1 ? '<span class="wc-block-slider__pagination">1-' . $total . '</span>' . $controls : '' );
 
 		return sprintf(
-			'<div class="%s alignfull">
-			<span class="wc-block-slider__index">1-' . count( $products ) . '</span>
-			<ul class="wc-block-slider__products">%s</ul>
-			</div>',
+			'<div class="%s alignfull wc-block-slider"><div class="wc-block-slider__products swiper-container">' . $navs . '<div class="swiper-wrapper">%s</div></div></div>',
 			esc_attr( $classes ),
 			$output
 		);
@@ -115,16 +118,16 @@ class HandpickedSlider extends AbstractProductGrid {
 
 		return apply_filters(
 			'woocommerce_blocks_product_grid_item_html',
-			"<li class=\"wc-block-slider__product\">
+			"<div class=\"wc-block-slider__product swiper-slide\">
 				{$data->image}
-				{$data->title}
-				{$data->badge}
-				{$data->price}
-				{$data->rating}
-				<a href=\"{$data->permalink}\" class=\"wc-block-slider__product-link\">
-				  {$data->button}
-				</a>
-			</li>",
+				<div class=\"wc-block-slider__product-content\">
+					{$data->title}
+					{$data->badge}
+					{$data->price}
+					{$data->rating}
+					<a href=\"{$data->permalink}\" class=\"wc-block-slider__product-link\">{$data->button}</a>
+				</div>
+			</div>",
 			$data,
 			$product
 		);
@@ -138,5 +141,62 @@ class HandpickedSlider extends AbstractProductGrid {
 	 */
 	protected function get_image_html( $product ) {
 		return '<div class="wc-block-slider__product-image"><div class="wc-block-slider__product-image-holder" style="background-image: url(' . wp_get_attachment_url( $product->get_image_id() ) . ');"></div></div>';
+	}
+
+	/**
+	 * Get the product title.
+	 *
+	 * @param \WC_Product $product Product.
+	 * @return string
+	 */
+	protected function get_title_html( $product ) {
+		if ( empty( $this->attributes['contentVisibility']['title'] ) ) {
+			return '';
+		}
+		return '<div class="wc-block-slider__product-title">' . $product->get_title() . '</div>';
+	}
+
+	/**
+	 * Get the price.
+	 *
+	 * @param \WC_Product $product Product.
+	 * @return string Rendered product output.
+	 */
+	protected function get_price_html( $product ) {
+		if ( empty( $this->attributes['contentVisibility']['price'] ) ) {
+			return '';
+		}
+		return sprintf(
+			'<div class="wc-block-slider__product-price price">%s</div>',
+			$product->get_price_html()
+		);
+	}
+
+	/**
+	 * Get the button.
+	 *
+	 * @param \WC_Product $product Product.
+	 * @return string Rendered product output.
+	 */
+	protected function get_button_html( $product ) {
+		$attributes = array(
+			'aria-label'       => $product->add_to_cart_description(),
+			'data-quantity'    => '1',
+			'data-product_id'  => $product->get_id(),
+			'data-product_sku' => $product->get_sku(),
+			'rel'              => 'nofollow',
+			'class'            => 'circle-cta custom-add_to_cart_button',
+		);
+
+		if ( $product->supports( 'ajax_add_to_cart' ) ) {
+			$attributes['class'] .= ' ajax_add_to_cart';
+		}
+
+		return sprintf(
+			'<a href="%s" %s><div class="decoration"></div><span class="caption">%s</span></a>',
+			esc_url( $product->add_to_cart_url() ),
+			wc_implode_html_attributes( $attributes ),
+			esc_html( 'AJOUTER' )
+		);
 	}
 }
