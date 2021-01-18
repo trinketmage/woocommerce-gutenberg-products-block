@@ -38,6 +38,10 @@ registerBlockType( 'woocommerce/handpicked-slider', {
 		},
 	},
 	attributes: {
+		layout: {
+			type: 'string',
+		},
+
 		/**
 		 * Alignment of product grid
 		 */
@@ -111,6 +115,9 @@ registerBlockType( 'woocommerce/handpicked-slider', {
 		{
 			// Deprecate shortcode save method in favor of dynamic rendering.
 			attributes: {
+				layout: {
+					type: 'string',
+				},
 				align: {
 					type: 'string',
 				},
@@ -141,7 +148,7 @@ registerBlockType( 'woocommerce/handpicked-slider', {
 				},
 			},
 			save: deprecatedConvertToShortcode(
-				'woocommerce/handpicked-products-slider'
+				'woocommerce/handpicked-slider'
 			),
 		},
 	],

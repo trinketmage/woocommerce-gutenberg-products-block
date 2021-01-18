@@ -57,6 +57,7 @@ class HandpickedSlider extends AbstractProductGrid {
 			'products'          => $this->get_schema_list_ids(),
 			'contentVisibility' => $this->get_schema_content_visibility(),
 			'isPreview'         => $this->get_schema_boolean( false ),
+			'layout'            => $this->get_schema_string(),
 		);
 	}
 
@@ -77,17 +78,23 @@ class HandpickedSlider extends AbstractProductGrid {
 			return '';
 		}
 
-		$classes  = $this->get_container_classes();
+		$tooth = 'tooth' === $this->attributes['layout'];
+
+		$classes  = $this->get_container_classes() . ( $tooth ? ' ' . $this->attributes['layout'] : '' );
 		$output   = implode( '', array_map( array( $this, 'render_product' ), $products ) );
 		$total    = count( $products );
 		$controls = '<span class="wc-block-slider__controls">
 		<span class="wc-block-slider__control wc-block-slider__left"><svg width="23" height="8" viewBox="0 0 23 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.3536 4.35356C22.5488 4.15829 22.5488 3.84171 22.3536 3.64645L19.1716 0.464468C18.9763 0.269206 18.6597 0.269206 18.4645 0.464468C18.2692 0.65973 18.2692 0.976312 18.4645 1.17157L21.2929 4L18.4645 6.82843C18.2692 7.02369 18.2692 7.34027 18.4645 7.53554C18.6597 7.7308 18.9763 7.7308 19.1716 7.53554L22.3536 4.35356ZM-4.37114e-08 4.5L22 4.5L22 3.5L4.37114e-08 3.5L-4.37114e-08 4.5Z" fill="#B82D25"/></svg></span>
 		<span class="wc-block-slider__control wc-block-slider__right"><svg width="23" height="8" viewBox="0 0 23 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.3536 4.35356C22.5488 4.15829 22.5488 3.84171 22.3536 3.64645L19.1716 0.464468C18.9763 0.269206 18.6597 0.269206 18.4645 0.464468C18.2692 0.65973 18.2692 0.976312 18.4645 1.17157L21.2929 4L18.4645 6.82843C18.2692 7.02369 18.2692 7.34027 18.4645 7.53554C18.6597 7.7308 18.9763 7.7308 19.1716 7.53554L22.3536 4.35356ZM-4.37114e-08 4.5L22 4.5L22 3.5L4.37114e-08 3.5L-4.37114e-08 4.5Z" fill="#B82D25"/></svg></span>
 		</span>';
-		$navs     = ( $total > 1 ? '<span class="wc-block-slider__pagination">1-' . $total . '</span>' . $controls : '' );
+		if ( ! $tooth ) {
+			$navs = ( $total > 1 ? '<span class="wc-block-slider__pagination">1-' . $total . '</span>' . $controls : '' );
+		} else {
+			$navs = $controls;
+		}
 
 		return sprintf(
-			'<div class="%s alignfull wc-block-slider"><div class="wc-block-slider__products swiper-container">' . $navs . '<div class="swiper-wrapper">%s</div></div></div>',
+			'<div class="%s alignfull wc-block-slider"><div class="wc-block-slider__products swiper-container" data-infinite="' . ( boolval( $tooth ) ? 'false' : 'true' ) . '"><div class="swiper-wrapper">%s</div>' . $navs . '</div></div>',
 			esc_attr( $classes ),
 			$output
 		);

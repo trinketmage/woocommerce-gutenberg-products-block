@@ -9,15 +9,12 @@ import {
 	Disabled,
 	PanelBody,
 	Placeholder,
-	RangeControl,
+	SelectControl,
 	ToolbarGroup,
 	withSpokenMessages,
-	ToggleControl,
 } from '@wordpress/components';
 import { Component } from '@wordpress/element';
 import PropTypes from 'prop-types';
-import { MAX_COLUMNS, MIN_COLUMNS } from '@woocommerce/block-settings';
-import GridContentControl from '@woocommerce/editor-components/grid-content-control';
 import ProductsControl from '@woocommerce/editor-components/products-control';
 import ProductOrderbyControl from '@woocommerce/editor-components/product-orderby-control';
 import { gridBlockPreview } from '@woocommerce/resource-previews';
@@ -29,62 +26,24 @@ import { Icon, widgets } from '@woocommerce/icons';
 class ProductsBlock extends Component {
 	getInspectorControls() {
 		const { attributes, setAttributes } = this.props;
-		const {
-			columns,
-			contentVisibility,
-			orderby,
-			alignButtons,
-		} = attributes;
+		const { orderby, layout } = attributes;
 
 		return (
 			<InspectorControls key="inspector">
 				<PanelBody
 					title={ __( 'Layout', 'woo-gutenberg-products-block' ) }
-					initialOpen
+					initialOpen={ false }
 				>
-					<RangeControl
-						label={ __(
-							'Columns',
-							'woo-gutenberg-products-block'
-						) }
-						value={ columns }
-						onChange={ ( value ) =>
-							setAttributes( { columns: value } )
-						}
-						min={ MIN_COLUMNS }
-						max={ MAX_COLUMNS }
-					/>
-					<ToggleControl
-						label={ __(
-							'Align Buttons',
-							'woo-gutenberg-products-block'
-						) }
-						help={
-							alignButtons
-								? __(
-										'Buttons are aligned vertically.',
-										'woo-gutenberg-products-block'
-								  )
-								: __(
-										'Buttons follow content.',
-										'woo-gutenberg-products-block'
-								  )
-						}
-						checked={ alignButtons }
-						onChange={ () =>
-							setAttributes( { alignButtons: ! alignButtons } )
-						}
-					/>
-				</PanelBody>
-				<PanelBody
-					title={ __( 'Content', 'woo-gutenberg-products-block' ) }
-					initialOpen
-				>
-					<GridContentControl
-						settings={ contentVisibility }
-						onChange={ ( value ) =>
-							setAttributes( { contentVisibility: value } )
-						}
+					<SelectControl
+						label={ __( 'Select a layout:' ) }
+						value={ layout }
+						onChange={ ( newLayout ) => {
+							setAttributes( { layout: newLayout } );
+						} }
+						options={ [
+							{ value: null, label: 'Default' },
+							{ value: 'tooth', label: 'Tooth' },
+						] }
 					/>
 				</PanelBody>
 				<PanelBody
