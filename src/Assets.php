@@ -90,6 +90,7 @@ class Assets {
 		$asset_api->register_script( 'wc-attribute-filter', $asset_api->get_block_asset_build_path( 'attribute-filter' ), $block_dependencies );
 		$asset_api->register_script( 'wc-active-filters', $asset_api->get_block_asset_build_path( 'active-filters' ), $block_dependencies );
 		$asset_api->register_script( 'wc-handpicked-slider', $asset_api->get_block_asset_build_path( 'handpicked-slider' ), $block_dependencies );
+		$asset_api->register_script( 'wc-all-categories', $asset_api->get_block_asset_build_path( 'all-categories' ), $block_dependencies );
 
 		if ( Package::feature()->is_experimental_build() ) {
 			$asset_api->register_script( 'wc-single-product-block', $asset_api->get_block_asset_build_path( 'single-product' ), $block_dependencies );

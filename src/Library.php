@@ -62,6 +62,7 @@ class Library {
 			'AttributeFilter',
 			'ActiveFilters',
 			'HandpickedSlider',
+			'AllCategories',
 		];
 		if ( Package::feature()->is_feature_plugin_build() ) {
 			$blocks[] = 'Checkout';

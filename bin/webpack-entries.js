@@ -49,6 +49,7 @@ const blocks = {
 		isExperimental: true,
 	},
 	'handpicked-slider': {},
+	'all-categories': {},
 };
 
 // Returns the entries for each block given a relative path (ie: `index.js`,
