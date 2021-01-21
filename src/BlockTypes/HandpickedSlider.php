@@ -160,7 +160,11 @@ class HandpickedSlider extends AbstractProductGrid {
 		if ( empty( $this->attributes['contentVisibility']['title'] ) ) {
 			return '';
 		}
-		return '<div class="wc-block-slider__product-title">' . $product->get_title() . '</div>';
+		$format = $product->get_attribute( 'pa_format' );
+		if ( ! empty( $format ) ) {
+			$format = '<span class="format-label"> – ' . $product->get_attribute( 'pa_format' ) . '</span>';
+		}
+		return '<div class="wc-block-slider__product-title">' . $product->get_title() . $format . '</div>';
 	}
 
 	/**
