@@ -250,7 +250,7 @@ class AllCategories extends AbstractDynamicBlock {
 			return '<span class="wc-block-all-categories-list-item__image wc-block-all-categories-list-item__image--placeholder">' . wc_placeholder_img( 'woocommerce_thumbnail' ) . '</span>';
 		}
 
-		return '<span class="wc-block-all-categories-list-item__image"><img src="' . wp_get_attachment_url( $image_id ) . '" /></span>';
+		return '<span class="wc-block-all-categories-list-item__image"><img src="' . wp_get_attachment_url( $image_id ) . '" /><div class="circle-cta static"><div class="decoration"></div><span class="caption">VOIR</span></div></span>';
 	}
 
 	/**
