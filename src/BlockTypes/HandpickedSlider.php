@@ -128,11 +128,12 @@ class HandpickedSlider extends AbstractProductGrid {
 			"<div class=\"wc-block-slider__product swiper-slide\">
 				{$data->image}
 				<div class=\"wc-block-slider__product-content\">
-					{$data->title}
+          <a href=\"{$data->permalink}\" class=\"wc-block-slider__product-link\">{$data->title}</a>
 					{$data->badge}
 					{$data->price}
-					{$data->rating}
-					<a href=\"{$data->permalink}\" class=\"wc-block-slider__product-link\">{$data->button}</a>
+          {$data->rating}
+          {$data->rating}
+          {$data->button}
 				</div>
 			</div>",
 			$data,
